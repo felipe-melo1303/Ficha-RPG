@@ -1,15 +1,15 @@
 let logo;
 let uploadedImg;
 let fileInput;
-let squareSize = 130;
 let fonte;
 
 let vida = 50;
 let sanidade = 50;
 let pe = 50;
 
-let buttonSize = 80;
-
+let buttonSize;
+let squareSize;
+let logoSize;
 let glowImg;
 
 function preload() {
@@ -19,24 +19,27 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth / 2, windowHeight / 2);
+  createCanvas(windowWidth, windowHeight); // ocupa toda a tela
   fileInput = createFileInput(handleFile);
   fileInput.hide();
   textFont(fonte);
   textAlign(CENTER, CENTER);
   imageMode(CENTER);
+
+  atualizarTamanhos();
 }
 
 function draw() {
   background("black");
-  let logoSize = 120;
-  let logoX = width - logoSize / 2 - 20
-  let logoY = logoSize / 2 + 20
-  image(logo, logoX, logoY, logoSize, logoSize);
-  
 
-  let squareX = 10;
-  let squareY = 10;
+  // logo canto superior direito
+  let logoX = width - logoSize / 2 - width * 0.03;
+  let logoY = logoSize / 2 + width * 0.03;
+  image(logo, logoX, logoY, logoSize, logoSize);
+
+  // quadrado para foto canto superior esquerdo
+  let squareX = width * 0.03;
+  let squareY = width * 0.03;
   stroke(255);
   noFill();
   rect(squareX, squareY, squareSize, squareSize);
@@ -45,71 +48,98 @@ function draw() {
     image(uploadedImg, squareX + squareSize / 2, squareY + squareSize / 2, squareSize, squareSize);
   }
 
+  // parte central
   let centerX = width / 2;
-  let startY = 200;
-  let spacingY = 180;
+  let startY = height * 0.25;     // primeira linha
+  let spacingY = height * 0.25;   // espaço entre linhas
 
-  image(glowImg, centerX, startY - 20, 150, 150);
-  image(glowImg, centerX, startY + spacingY - 20, 150, 150);
-  image(glowImg, centerX, startY + spacingY * 2 - 20, 150, 150);
+  // glow atrás dos números
+  let glowSize = width * 0.35;
+  image(glowImg, centerX, startY, glowSize, glowSize);
+  image(glowImg, centerX, startY + spacingY, glowSize, glowSize);
+  image(glowImg, centerX, startY + spacingY * 2, glowSize, glowSize);
 
   fill("white");
 
-  textSize(100);
-  text(vida, centerX, startY - 20);
-  text(sanidade, centerX, startY + spacingY - 20);
-  text(pe, centerX, startY + spacingY * 2 - 20);
+  // números
+  textSize(width * 0.15);
+  text(vida, centerX, startY);
+  text(sanidade, centerX, startY + spacingY);
+  text(pe, centerX, startY + spacingY * 2);
 
-  textSize(50);
-  text("Vida", centerX, startY + 50);
-  text("Sanidade", centerX, startY + spacingY + 50);
-  text("PE", centerX, startY + spacingY * 2 + 50);
+  // labels
+  textSize(width * 0.07);
+  text("Vida", centerX, startY + height * 0.08);
+  text("Sanidade", centerX, startY + spacingY + height * 0.08);
+  text("PE", centerX, startY + spacingY * 2 + height * 0.08);
 
-  textSize(80);
-  text("+", centerX + 100, startY);
-  text("-", centerX - 100, startY);
+  // botões + e -
+  textSize(width * 0.15);
+  text("+", centerX + width * 0.25, startY);
+  text("-", centerX - width * 0.25, startY);
 
-  text("+", centerX + 100, startY + spacingY);
-  text("-", centerX - 100, startY + spacingY);
+  text("+", centerX + width * 0.25, startY + spacingY);
+  text("-", centerX - width * 0.25, startY + spacingY);
 
-  text("+", centerX + 100, startY + spacingY * 2);
-  text("-", centerX - 100, startY + spacingY * 2);
+  text("+", centerX + width * 0.25, startY + spacingY * 2);
+  text("-", centerX - width * 0.25, startY + spacingY * 2);
 }
 
 function mousePressed() {
   let centerX = width / 2;
-  let startY = 200;
-  let spacingY = 180;
-  
+  let startY = height * 0.25;
+  let spacingY = height * 0.25;
 
-  if (mouseX > centerX + 100 - buttonSize / 2 && mouseX < centerX + 100 + buttonSize / 2 &&
-      mouseY > startY - buttonSize / 2 && mouseY < startY + buttonSize / 2) {
+  // vida +
+  if (mouseX > centerX + width * 0.25 - buttonSize / 2 &&
+      mouseX < centerX + width * 0.25 + buttonSize / 2 &&
+      mouseY > startY - buttonSize / 2 &&
+      mouseY < startY + buttonSize / 2) {
     vida++;
   }
-  if (mouseX > centerX - 100 - buttonSize / 2 && mouseX < centerX - 100 + buttonSize / 2 &&
-      mouseY > startY - buttonSize / 2 && mouseY < startY + buttonSize / 2) {
+  // vida -
+  if (mouseX > centerX - width * 0.25 - buttonSize / 2 &&
+      mouseX < centerX - width * 0.25 + buttonSize / 2 &&
+      mouseY > startY - buttonSize / 2 &&
+      mouseY < startY + buttonSize / 2) {
     vida--;
   }
 
-  if (mouseX > centerX + 100 - buttonSize / 2 && mouseX < centerX + 100 + buttonSize / 2 &&
-      mouseY > startY + spacingY - buttonSize / 2 && mouseY < startY + spacingY + buttonSize / 2) {
+  // sanidade +
+  if (mouseX > centerX + width * 0.25 - buttonSize / 2 &&
+      mouseX < centerX + width * 0.25 + buttonSize / 2 &&
+      mouseY > startY + spacingY - buttonSize / 2 &&
+      mouseY < startY + spacingY + buttonSize / 2) {
     sanidade++;
   }
-  if (mouseX > centerX - 100 - buttonSize / 2 && mouseX < centerX - 100 + buttonSize / 2 &&
-      mouseY > startY + spacingY - buttonSize / 2 && mouseY < startY + spacingY + buttonSize / 2) {
+  // sanidade -
+  if (mouseX > centerX - width * 0.25 - buttonSize / 2 &&
+      mouseX < centerX - width * 0.25 + buttonSize / 2 &&
+      mouseY > startY + spacingY - buttonSize / 2 &&
+      mouseY < startY + spacingY + buttonSize / 2) {
     sanidade--;
   }
 
-  if (mouseX > centerX + 100 - buttonSize / 2 && mouseX < centerX + 100 + buttonSize / 2 &&
-      mouseY > startY + spacingY * 2 - buttonSize / 2 && mouseY < startY + spacingY * 2 + buttonSize / 2) {
+  // pe +
+  if (mouseX > centerX + width * 0.25 - buttonSize / 2 &&
+      mouseX < centerX + width * 0.25 + buttonSize / 2 &&
+      mouseY > startY + spacingY * 2 - buttonSize / 2 &&
+      mouseY < startY + spacingY * 2 + buttonSize / 2) {
     pe++;
   }
-  if (mouseX > centerX - 100 - buttonSize / 2 && mouseX < centerX - 100 + buttonSize / 2 &&
-      mouseY > startY + spacingY * 2 - buttonSize / 2 && mouseY < startY + spacingY * 2 + buttonSize / 2) {
+  // pe -
+  if (mouseX > centerX - width * 0.25 - buttonSize / 2 &&
+      mouseX < centerX - width * 0.25 + buttonSize / 2 &&
+      mouseY > startY + spacingY * 2 - buttonSize / 2 &&
+      mouseY < startY + spacingY * 2 + buttonSize / 2) {
     pe--;
   }
 
-  if (mouseX > 10 && mouseX < 10 + squareSize && mouseY > 10 && mouseY < 10 + squareSize) {
+  // upload de imagem
+  if (mouseX > width * 0.03 &&
+      mouseX < width * 0.03 + squareSize &&
+      mouseY > width * 0.03 &&
+      mouseY < width * 0.03 + squareSize) {
     fileInput.elt.click();
   }
 }
@@ -124,4 +154,11 @@ function handleFile(file) {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  atualizarTamanhos();
+}
+
+function atualizarTamanhos() {
+  squareSize = width * 0.2;   // quadrado proporcional
+  buttonSize = width * 0.15;  // tamanho do botão
+  logoSize   = width * 0.2;   // logo proporcional
 }
