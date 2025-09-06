@@ -28,6 +28,17 @@ function setup() {
   imageMode(CENTER);
 
   atualizarTamanhos();
+
+  // 👇 escuta evento nativo de toque para ser instantâneo
+  document.addEventListener("touchstart", (e) => {
+    // previne zoom/scroll
+    e.preventDefault();
+    // pega coordenadas do primeiro dedo
+    let touch = e.touches[0];
+    let x = touch.clientX;
+    let y = touch.clientY;
+    checarBotoes(x, y);
+  }, { passive: false });
 }
 
 function draw() {
@@ -89,12 +100,6 @@ function draw() {
 // mouse no PC
 function mousePressed() {
   checarBotoes(mouseX, mouseY);
-}
-
-// toque no celular
-function touchStarted() {
-  checarBotoes(touchX, touchY);
-  return false; // impede scroll na tela
 }
 
 // função que centraliza a lógica
